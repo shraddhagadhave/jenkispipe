@@ -9,20 +9,23 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-		for(int i=0;i<2;i++){
-		stage "Stage#" + i
-	    print 'hello, world!'
-     
-            if(i==0){
-		 git "https://github.com/shraddhagadhave/bankappgradle.git"
-		 echo "Running on Stage#0"
+		    input 'Do you want to proceed?'
+		
+           }
+        }
+	    stage('pre-build') {
+		    parallel{
+			    stage('unittest') {
+				    steps{
+				    echo 'I m in unit testing phase'
+				    }		    
+			    }
+			    stage('integrationtest'){
+				    steps{
+				      echo 'I m in integration testing phase'
+				    }
+			    }
 	    }
-            else{
-                 build "bankapp"
-		 echo "Running on Stage#1"
-	    }
-            }
-          }
         }
         stage('Build') {
             steps {
